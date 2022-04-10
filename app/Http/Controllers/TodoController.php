@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+// use App\Http\Resources\TodosResource;
 
 class TodoController extends Controller
 {
@@ -14,6 +15,7 @@ class TodoController extends Controller
     public function index()
     {
         return Todo::all();
+        // return TodosResource::collection(Todo::all());
     }
 
     /**
@@ -30,7 +32,6 @@ class TodoController extends Controller
             'due_date' => '04/04/2022',
             'is_complete' => 'false',
         ]);
-
     }
 
     /**
@@ -39,9 +40,20 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Todo $todo)
     {
-        //
+        // return Todo::find($id);
+        return \response()->json([
+            'todos' => [
+                'id' => $todo->id,
+                'description' => $todo->description,
+                'due_date' => $todo->due_date,
+                'is_complete' => (boolean)$todo->false,
+            ],
+            'success' => 'true',
+            'error' => 'null'
+        ]);
+        // return new TodosResource($todo);
     }
 
     /**

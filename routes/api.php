@@ -18,8 +18,15 @@ use Illuminate\Support\Facades\Route;
 //     return Todo::all();
 // });
 
-Route::get('/todos', [TodoController::class, 'index']);
-Route::post('/todos', [TodoController::class, 'store']);
+
+// Route::get('/todos', [TodoController::class, 'index']);
+// Route::post('/todos', [TodoController::class, 'store']);
+Route::resource('todos', TodoController::class);
+// Route::get('todos/{todo}', [TodoControlller::class, 'show']);
+
+
+
+
 
 // Route::post('todos', function() {
 //     return Todo::create([
