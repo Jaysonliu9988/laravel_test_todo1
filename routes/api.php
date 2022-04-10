@@ -1,5 +1,5 @@
 <?php
-
+use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/todos', function(){
-    return 'todos';
+    // return 'todos';
+    return Todo::all();
+});
+
+Route::post('todos', function() {
+    return Todo::create([
+        'name' => 'Example Todo',
+        'description' => 'This is an example Todo',
+        'due_date' => '04/04/2022',
+        'is_complete' => 'false'
+    ]);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
