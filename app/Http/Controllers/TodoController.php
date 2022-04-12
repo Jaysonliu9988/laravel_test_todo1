@@ -12,10 +12,11 @@ class TodoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        return Todo::all();
-        // return TodosResource::collection(Todo::all());
+        $result = Todo::all(['id', 'name', 'description', 'due_date', 'is_complete']);
+        return $this->success($result, "todos");
     }
 
     /**
@@ -26,12 +27,16 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        return Todo::create([
-            'name' => 'Example Todo',
-            'description' => 'This is an example Todo',
-            'due_date' => '04/04/2022',
-            'is_complete' => 'false',
-        ]);
+        $params = $request->only(['name','description','due_date','is_complete']);
+        $result = Todo::create($params);
+        $result->timestamps = false;
+
+
+        if (!$result) {
+            return $this->fail('data error');
+        }
+        return $this->success($result,"todo");
+
     }
 
     /**
@@ -40,20 +45,10 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show($id)
     {
-        // return Todo::find($id);
-        return \response()->json([
-            'todos' => [
-                'id' => $todo->id,
-                'description' => $todo->description,
-                'due_date' => $todo->due_date,
-                'is_complete' => (boolean)$todo->false,
-            ],
-            'success' => 'true',
-            'error' => 'null'
-        ]);
-        // return new TodosResource($todo);
+        $result = Todo::find($id,['id','name','description','due_date','is_complete']);
+        return $this->success($result, "todo");
     }
 
     /**
@@ -65,9 +60,11 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $todo = Todo::find($id);
+        $todo = Todo::find($id, ['id','name', 'description', 'due_date', 'is_complete']);
+        if (!$todo) {return $this->fail('not found');}
+        $todo->timestamps = false;
         $todo->update($request->all());
-        return $todo;
+        return $this->success($todo, 'todo');
     }
 
     /**
@@ -76,8 +73,8 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+        public function destroy($id)
+        {
+            return Todo::destroy($id);
+        }
 }
