@@ -14,4 +14,11 @@ class Todo extends Model
         'due_date',
         'is_complete'
     ];
+
+    protected $casts =  [
+        'is_complete' => 'boolean',
+    ];
+
+    public $timestamps = false;
+
 }

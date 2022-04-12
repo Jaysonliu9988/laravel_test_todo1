@@ -15,7 +15,16 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/todos/1');
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+                ->assertJson([
+                'todo' => [
+                    'id' => true,
+                    'name' => true,
+                    'description' => true,
+                    'due_date' => true,
+                    'is_complete' => true],
+
+            ]);
     }
 
     public function test_get_list_Todos()
@@ -42,6 +51,29 @@ class ExampleTest extends TestCase
             ]);
     }
 
+    public function test_patch_edit_todo()
+    {
+        $response = $this->patchJson('/todos/1', ['name' => 'Example Todo8']);
 
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'todo' => [
+                    'name' => 'Example Todo8',
+                ],
+            ]);
+    }
+
+    public function test_delete_todo()
+    {
+        $response = $this->patchJson('/todos/44');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'todo' => [
+                ],
+            ]);
+    }
 
 }
