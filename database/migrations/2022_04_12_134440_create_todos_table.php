@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->date('due_date');
-            $table->boolean('is_complete');
-            // $table->timestamps();
+            $table->integer('is_complete');
+            $table->timestamps();
         });
     }
 
